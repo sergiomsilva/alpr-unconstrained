@@ -40,5 +40,5 @@ We know that not everyone has an NVIDIA card available, and sometimes it is cumb
 ## Further information
 
 * Paper webpage: http://www.inf.ufrgs.br/~smsilva/alpr-unconstrained/
-* Dataset annotations used for training: http://www.inf.ufrgs.br/~crjung/alpr-datasets
+* Datasets: http://www.inf.ufrgs.br/~crjung/alpr-datasets
 
