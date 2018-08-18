@@ -2,7 +2,7 @@
 
 ## Introduction
 
-This repository contains the author's implementation of ECCV 2018 paper "Automatic License Plate Recognition in Unconstrained Scenarios".
+This repository contains the author's implementation of ECCV 2018 paper "License Plate Detection and Recognition in Unconstrained Scenarios".
 
 ## Requirements
 
