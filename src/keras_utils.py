@@ -3,10 +3,11 @@ import numpy as np
 import cv2
 import time
 
-from label import Label
 from os.path import splitext
-from utils import getWH, nms
-from projection_utils import getRectPts, find_T_matrix
+
+from src.label import Label
+from src.utils import getWH, nms
+from src.projection_utils import getRectPts, find_T_matrix
 
 
 class DLabel (Label):
