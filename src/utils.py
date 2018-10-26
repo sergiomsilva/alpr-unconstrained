@@ -2,11 +2,8 @@
 import numpy as np
 import cv2
 import sys
-import time
 
-from label import Label
 from glob import glob
-from os.path import splitext
 
 
 def im2single(I):
@@ -95,3 +92,32 @@ def crop_region(I,label,bg=0.5):
 	Iout[offset[1]:(offset[1] + wh[1]),offset[0]:(offset[0] + wh[0])] = I[tl[1]:br[1],tl[0]:br[0]]
 
 	return Iout
+
+def hsv_transform(I,hsv_modifier):
+	I = cv2.cvtColor(I,cv2.COLOR_BGR2HSV)
+	I = I + hsv_modifier
+	return cv2.cvtColor(I,cv2.COLOR_HSV2BGR)
+
+def IOU(tl1,br1,tl2,br2):
+	wh1,wh2 = br1-tl1,br2-tl2
+	assert((wh1>=.0).all() and (wh2>=.0).all())
+	
+	intersection_wh = np.maximum(np.minimum(br1,br2) - np.maximum(tl1,tl2),0.)
+	intersection_area = np.prod(intersection_wh)
+	area1,area2 = (np.prod(wh1),np.prod(wh2))
+	union_area = area1 + area2 - intersection_area;
+	return intersection_area/union_area
+
+def IOU_centre_and_dims(cc1,wh1,cc2,wh2):
+	return IOU(cc1-wh1/2.,cc1+wh1/2.,cc2-wh2/2.,cc2+wh2/2.)
+
+
+def show(I,wname='Display'):
+	cv2.imshow(wname, I)
+	cv2.moveWindow(wname,0,0)
+	key = cv2.waitKey(0) & 0xEFFFFF
+	cv2.destroyWindow(wname)
+	if key == 27:
+		sys.exit()
+	else:
+		return key

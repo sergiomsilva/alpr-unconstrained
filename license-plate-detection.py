@@ -21,7 +21,7 @@ if __name__ == '__main__':
 
 	lp_threshold = .5
 
-	wpod_net_path = 'data/lp-detector/wpod-net.h5'
+	wpod_net_path = sys.argv[2]
 	wpod_net = load_model(wpod_net_path)
 
 	imgs_paths = glob('%s/*car.png' % input_dir)

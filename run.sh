@@ -71,7 +71,7 @@ fi
 python vehicle-detection.py $1 $2
 
 # Detect license plates
-python license-plate-detection.py $2
+python license-plate-detection.py $2 data/lp-detector/wpod-net.h5
 
 # OCR
 python license-plate-ocr.py $2

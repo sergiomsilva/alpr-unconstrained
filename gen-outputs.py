@@ -45,14 +45,13 @@ for img_file in img_files:
 			ptspx = pts*np.array(I.shape[1::-1],dtype=float).reshape(2,1)
 			draw_losangle(I,ptspx,RED,3)
 
-			lp_str = ''
-			with open(lp_label_str,'r') as f:
-				lp_str = f.read().strip()
+			if isfile(lp_label_str):
+				with open(lp_label_str,'r') as f:
+					lp_str = f.read().strip()
+				llp = Label(0,tl=pts.min(1),br=pts.max(1))
+				write2img(I,llp,lp_str)
 
-			llp = Label(0,tl=pts.min(1),br=pts.max(1))
-			write2img(I,llp,lp_str)
-
-			sys.stdout.write(',%s' % lp_str)
+				sys.stdout.write(',%s' % lp_str)
 
 	sys.stdout.write('\n')
 
