@@ -41,6 +41,8 @@ if __name__ == '__main__':
 
 		R = detect(vehicle_net, vehicle_meta, img_path ,thresh=vehicle_threshold)
 
+		R = [r for r in R if r[0] in ['car','bus']]
+
 		print '\t\t%d cars found' % len(R)
 
 		if len(R):
