@@ -1,6 +1,8 @@
 
 import numpy as np
 
+from os.path import isfile
+
 
 class Label:
 
@@ -53,6 +55,9 @@ class Label:
 
 
 def lread(file_path,label_type=Label):
+
+	if not isfile(file_path):
+		return []
 
 	objs = []
 	with open(file_path,'r') as fd:

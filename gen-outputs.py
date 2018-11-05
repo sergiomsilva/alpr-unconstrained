@@ -31,29 +31,31 @@ for img_file in img_files:
 
 	sys.stdout.write('%s' % bname)
 
-	for i,lcar in enumerate(Lcar):
+	if Lcar:
 
-		draw_label(I,lcar,color=YELLOW,thickness=3)
+		for i,lcar in enumerate(Lcar):
 
-		lp_label 		= '%s/%s_%dcar_lp.txt'		% (output_dir,bname,i)
-		lp_label_str 	= '%s/%s_%dcar_lp_str.txt'	% (output_dir,bname,i)
+			draw_label(I,lcar,color=YELLOW,thickness=3)
 
-		if isfile(lp_label):
+			lp_label 		= '%s/%s_%dcar_lp.txt'		% (output_dir,bname,i)
+			lp_label_str 	= '%s/%s_%dcar_lp_str.txt'	% (output_dir,bname,i)
 
-			Llp_shapes = readShapes(lp_label)
-			pts = Llp_shapes[0].pts*lcar.wh().reshape(2,1) + lcar.tl().reshape(2,1)
-			ptspx = pts*np.array(I.shape[1::-1],dtype=float).reshape(2,1)
-			draw_losangle(I,ptspx,RED,3)
+			if isfile(lp_label):
 
-			if isfile(lp_label_str):
-				with open(lp_label_str,'r') as f:
-					lp_str = f.read().strip()
-				llp = Label(0,tl=pts.min(1),br=pts.max(1))
-				write2img(I,llp,lp_str)
+				Llp_shapes = readShapes(lp_label)
+				pts = Llp_shapes[0].pts*lcar.wh().reshape(2,1) + lcar.tl().reshape(2,1)
+				ptspx = pts*np.array(I.shape[1::-1],dtype=float).reshape(2,1)
+				draw_losangle(I,ptspx,RED,3)
 
-				sys.stdout.write(',%s' % lp_str)
+				if isfile(lp_label_str):
+					with open(lp_label_str,'r') as f:
+						lp_str = f.read().strip()
+					llp = Label(0,tl=pts.min(1),br=pts.max(1))
+					write2img(I,llp,lp_str)
 
-	sys.stdout.write('\n')
+					sys.stdout.write(',%s' % lp_str)
 
 	cv2.imwrite('%s/%s_output.png' % (output_dir,bname),I)
+	sys.stdout.write('\n')
+
 
