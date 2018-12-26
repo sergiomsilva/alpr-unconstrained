@@ -12,7 +12,7 @@ In order to easily run the code, you must have installed the Keras framework wit
 $ cd darknet && make
 ```
 
-The current version was tested in an Ubuntu 16.04 machine, with Keras 2.0.6 and TensorFlow 1.5.0.
+**The current version was tested in an Ubuntu 16.04 machine, with Keras 2.0.6, TensorFlow 1.5.0 and Python 2.7.**
 
 ## Download Models
 
