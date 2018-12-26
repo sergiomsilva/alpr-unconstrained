@@ -39,7 +39,7 @@ if __name__ == '__main__':
 
 		bname = basename(splitext(img_path)[0])
 
-		R = detect(vehicle_net, vehicle_meta, img_path ,thresh=vehicle_threshold)
+		R,_ = detect(vehicle_net, vehicle_meta, img_path ,thresh=vehicle_threshold)
 
 		R = [r for r in R if r[0] in ['car','bus']]
 
