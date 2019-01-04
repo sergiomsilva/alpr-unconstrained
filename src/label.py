@@ -120,11 +120,11 @@ class Shape():
 		self.pts 	= np.array([float(value) for value in values]).reshape((2,ss))
 		self.text   = text
 
-def readShapes(path):
+def readShapes(path,obj_type=Shape):
 	shapes = []
 	with open(path) as fp:
 		for line in fp:
-			shape = Shape()
+			shape = obj_type()
 			shape.read(line)
 			shapes.append(shape)
 	return shapes
