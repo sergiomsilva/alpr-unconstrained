@@ -30,7 +30,7 @@ then
 	exit 1
 fi
 
-lp_model="data/lp-detector/wpod-net.h5"
+lp_model="data/lp-detector/wpod-net_update1.h5"
 input_dir=''
 output_dir=''
 csv_file=''

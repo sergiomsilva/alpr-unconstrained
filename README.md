@@ -30,7 +30,7 @@ Use the script "run.sh" to run our ALPR approach. It requires 3 arguments:
 * __CSV file:__ specify an output CSV file.
 
 ```shellscript
-$ bash run.sh -i samples/test -o /tmp/output -c /tmp/output/results.csv
+$ bash get-networks.sh && bash run.sh -i samples/test -o /tmp/output -c /tmp/output/results.csv
 ```
 
 ## Training the LP detector
