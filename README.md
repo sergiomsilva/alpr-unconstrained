@@ -30,7 +30,7 @@ Use the script "run.sh" to run our ALPR approach. It requires 3 arguments:
 * __CSV file:__ specify an output CSV file.
 
 ```shellscript
-$ bash run.sh samples/test /tmp/output /tmp/output/results.csv
+$ bash run.sh -i samples/test -o /tmp/output -c /tmp/output/results.csv
 ```
 
 ## Training the LP detector
@@ -40,10 +40,12 @@ To train the LP detector network from scratch, or fine-tuning it for new samples
 The following command can be used to train the network from scratch considering the data inside the train-detector folder:
 
 ```shellscript
-$ python train-detector.py --name new-network --outdir /tmp/ --input-dir samples/train-detector
+$ mkdir models
+$ python create-model.py eccv models/eccv-model-scracth
+$ python train-detector.py --model models/eccv-model-scracth --name my-trained-model --train-dir samples/train-detector --output-dir models/my-trained-model/ -op Adam -lr .001 -its 300000 -bs 64
 ```
 
-For fine-tunning, add "-m data/lp-detector/wpod-net" to the command line above.
+For fine-tunning, use your model with --model option.
 
 ## A word on GPU and CPU
 

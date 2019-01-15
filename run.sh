@@ -27,61 +27,80 @@ retval=$?
 if [ $retval -eq 0 ]
 then
 	echo "Darknet is not compiled! Go to 'darknet' directory and 'make'!"
-	exit 0
-fi
-
-# Check # of arguments
-if [ ! $# -eq 3 ]
-then
-	echo ""
-	echo " Required arguments:"
-	echo ""
-	echo "   1. Input dir path (containing JPG or PNG images)"
-	echo "   2. Output dir path"
-	echo "   3. Output CSV file path"
-	echo ""
 	exit 1
 fi
 
-read -n1 -r -p "Press any key to continue..." key
+lp_model="data/lp-detector/wpod-net.h5"
+input_dir=''
+output_dir=''
+csv_file=''
 
 
-# Download all networks
-bash get-networks.sh
+# Check # of arguments
+usage() {
+	echo ""
+	echo " Usage:"
+	echo ""
+	echo "   bash $0 -i input/dir -o output/dir -c csv_file.csv [-h] [-l path/to/model]:"
+	echo ""
+	echo "   -i   Input dir path (containing JPG or PNG images)"
+	echo "   -o   Output dir path"
+	echo "   -c   Output CSV file path"
+	echo "   -l   Path to Keras LP detector model (default = $lp_model)"
+	echo "   -h   Print this help information"
+	echo ""
+	exit 1
+}
 
+while getopts 'i:o:c:l:h' OPTION; do
+	case $OPTION in
+		i) input_dir=$OPTARG;;
+		o) output_dir=$OPTARG;;
+		c) csv_file=$OPTARG;;
+		l) lp_model=$OPTARG;;
+		h) usage;;
+	esac
+done
+
+if [ -z "$input_dir"  ]; then echo "Input dir not set."; usage; exit 1; fi
+if [ -z "$output_dir" ]; then echo "Ouput dir not set."; usage; exit 1; fi
+if [ -z "$csv_file"   ]; then echo "CSV file not set." ; usage; exit 1; fi
 
 # Check if input dir exists
-check_dir $1
+check_dir $input_dir
 retval=$?
 if [ $retval -eq 0 ]
 then
-	echo "Input directory ($1) does not exist"
-	exit 0
+	echo "Input directory ($input_dir) does not exist"
+	exit 1
 fi
 
 # Check if output dir exists, if not, create it
-check_dir $2
+check_dir $output_dir
 retval=$?
 if [ $retval -eq 0 ]
 then
-	mkdir -p $2
+	mkdir -p $output_dir
 fi
 
+# End if any error occur
+set -e
+
 # Detect vehicles
-python vehicle-detection.py $1 $2
+python vehicle-detection.py $input_dir $output_dir
 
 # Detect license plates
-python license-plate-detection.py $2 data/lp-detector/wpod-net.h5
+python license-plate-detection.py $output_dir $lp_model
 
 # OCR
-python license-plate-ocr.py $2
+python license-plate-ocr.py $output_dir
 
 # Draw output and generate list
-python gen-outputs.py $1 $2 > $3
+python gen-outputs.py $input_dir $output_dir > $csv_file
 
 # Clean files and draw output
-rm $2/*_lp.png
-rm $2/*car.png
-rm $2/*_cars.txt
-rm $2/*_lp.txt
-rm $2/*_str.txt
+rm $output_dir/*_lp.png
+rm $output_dir/*car.png
+rm $output_dir/*_cars.txt
+rm $output_dir/*_lp.txt
+rm $output_dir/*_str.txt
