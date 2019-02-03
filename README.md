@@ -25,9 +25,9 @@ $ bash get-networks.sh
 ## Running a simple test
 
 Use the script "run.sh" to run our ALPR approach. It requires 3 arguments:
-* __Input directory:__ should contain at least 1 image in JPG or PNG format;
-* __Output directory:__ during the recognition process, many temporary files will be generated inside this directory and erased in the end. The remaining files will be related to the automatic annotated image;
-* __CSV file:__ specify an output CSV file.
+* __Input directory (-i):__ should contain at least 1 image in JPG or PNG format;
+* __Output directory (-o):__ during the recognition process, many temporary files will be generated inside this directory and erased in the end. The remaining files will be related to the automatic annotated image;
+* __CSV file (-c):__ specify an output CSV file.
 
 ```shellscript
 $ bash get-networks.sh && bash run.sh -i samples/test -o /tmp/output -c /tmp/output/results.csv
