@@ -4,6 +4,8 @@
 
 This repository contains the author's implementation of ECCV 2018 paper "License Plate Detection and Recognition in Unconstrained Scenarios".
 
+* Paper webpage: http://sergiomsilva.com/pubs/alpr-unconstrained/
+
 ## Requirements
 
 In order to easily run the code, you must have installed the Keras framework with TensorFlow backend. The Darknet framework is self-contained in the "darknet" folder and must be compiled before running the tests. To build Darknet just type "make" in "darknet" folder:
@@ -50,9 +52,3 @@ For fine-tunning, use your model with --model option.
 ## A word on GPU and CPU
 
 We know that not everyone has an NVIDIA card available, and sometimes it is cumbersome to properly configure CUDA. Thus, we opted to set the Darknet makefile to use CPU as default instead of GPU to favor an easy execution for most people instead of a fast performance. Therefore, the vehicle detection and OCR will be pretty slow. If you want to accelerate them, please edit the Darknet makefile variables to use GPU.
-
-## Further information
-
-* Paper webpage: http://www.inf.ufrgs.br/~smsilva/alpr-unconstrained/
-* Datasets: http://www.inf.ufrgs.br/~crjung/alpr-datasets
-
