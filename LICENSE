@@ -1,5 +1,5 @@
 
-Copyright (C) 2018, Sergio Montazzolli Silva
+Copyright (C) 2018, Sergio Montazzolli Silva and Claudio Rosito Jung
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -13,3 +13,11 @@ GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+If you use results produced by our code in any publication,
+please cite our paper:
+
+Sergio Montazzolli Silva and Claudio Rosito Jung,
+"License Plate Detection and Recognition in Unconstrained Scenarios",
+In Proceedings of the European Conference on Computer Vision (ECCV),
+pp. 580-596. 2018.  
