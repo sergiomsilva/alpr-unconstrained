@@ -1,3 +1,4 @@
+from __future__ import print_function
 from darknet import *
 
 def predict_tactic(net, s):
@@ -11,7 +12,7 @@ def predict_tactic(net, s):
         pred = predict(net, d)
         d[ord(c)] = 0
     c = s[-1]
-    while 1:
+    while True:
         d[ord(c)] = 1
         pred = predict(net, d)
         d[ord(c)] = 0
@@ -34,4 +35,4 @@ def predict_tactics(net, s, n):
 
 net = load_net("cfg/coq.test.cfg", "/home/pjreddie/backup/coq.backup", 0)
 t = predict_tactics(net, "+++++\n", 10)
-print t
+print(t)

@@ -1,3 +1,4 @@
+from __future__ import print_function
 # Stupid python path shit.
 # Instead just add darknet.py to somewhere in your python path
 # OK actually that might not be a great idea, idk, work in progress
@@ -13,15 +14,15 @@ dn.set_gpu(0)
 net = dn.load_net("cfg/yolo-thor.cfg", "/home/pjreddie/backup/yolo-thor_final.weights", 0)
 meta = dn.load_meta("cfg/thor.data")
 r = dn.detect(net, meta, "data/bedroom.jpg")
-print r
+print(r)
 
 # And then down here you could detect a lot more images like:
 r = dn.detect(net, meta, "data/eagle.jpg")
-print r
+print(r)
 r = dn.detect(net, meta, "data/giraffe.jpg")
-print r
+print(r)
 r = dn.detect(net, meta, "data/horses.jpg")
-print r
+print(r)
 r = dn.detect(net, meta, "data/person.jpg")
-print r
+print(r)
 
