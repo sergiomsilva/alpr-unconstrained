@@ -1,3 +1,4 @@
+from __future__ import print_function
 from ctypes import *
 import math
 import random
@@ -152,6 +153,6 @@ if __name__ == "__main__":
     net = load_net("cfg/tiny-yolo.cfg", "tiny-yolo.weights", 0)
     meta = load_meta("cfg/coco.data")
     r = detect(net, meta, "data/dog.jpg")
-    print r
+    print(r)
     
 

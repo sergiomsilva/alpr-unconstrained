@@ -1,3 +1,4 @@
+from __future__ import print_function
 
 import sys
 import keras
@@ -83,7 +84,7 @@ def create_model_mobnet():
 	backbone_layers = {'backbone_' + layer.name: layer for layer in backbone.layers}
 	for layer in model.layers:
 		if layer.name in backbone_layers:
-			print 'setting ' + layer.name
+			print('setting ' + layer.name)
 			layer.set_weights(backbone_layers[layer.name].get_weights())
 
 	return model
@@ -98,10 +99,10 @@ if __name__ == '__main__':
 
 	modelf = getattr(sys.modules[__name__],'create_model_' + sys.argv[1])
 	
-	print 'Creating model %s' % sys.argv[1]
+	print('Creating model %s' % sys.argv[1])
 	model = modelf()
-	print 'Finished'
+	print('Finished')
 
-	print 'Saving at %s' % sys.argv[2]
+	print('Saving at %s' % sys.argv[2])
 	save_model(model,sys.argv[2])
 
