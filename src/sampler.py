@@ -12,7 +12,7 @@ def labels2output_map(label,lppts,dim,stride):
 
 	side = ((float(dim) + 40.)/2.)/stride # 7.75 when dim = 208 and stride = 16
 
-	outsize = dim/stride
+	outsize = dim//stride
 	Y  = np.zeros((outsize,outsize,2*4+1),dtype='float32')
 	MN = np.array([outsize,outsize])
 	WH = np.array([dim,dim],dtype=float)
@@ -24,16 +24,16 @@ def labels2output_map(label,lppts,dim,stride):
 		for y in range(tly,bry):
 
 			mn = np.array([float(x) + .5, float(y) + .5])
-			iou = IOU_centre_and_dims(mn/MN,label.wh(),label.cc(),label.wh())
+			iou = IOU_centre_and_dims(mn//MN,label.wh(),label.cc(),label.wh())
 
 			if iou > .5:
 
 				p_WH = lppts*WH.reshape((2,1))
-				p_MN = p_WH/stride
+				p_MN = p_WH//stride
 
 				p_MN_center_mn = p_MN - mn.reshape((2,1))
 
-				p_side = p_MN_center_mn/side
+				p_side = p_MN_center_mn//side
 
 				Y[y,x,0] = 1.
 				Y[y,x,1:] = p_side.T.flatten()
@@ -46,9 +46,9 @@ def pts2ptsh(pts):
 def project(I,T,pts,dim):
 	ptsh 	= np.matrix(np.concatenate((pts,np.ones((1,4))),0))
 	ptsh 	= np.matmul(T,ptsh)
-	ptsh 	= ptsh/ptsh[2]
+	ptsh 	= ptsh//ptsh[2]
 	ptsret  = ptsh[:2]
-	ptsret  = ptsret/dim
+	ptsret  = ptsret//dim
 	Iroi = cv2.warpPerspective(I,T,(dim,dim),borderValue=.0,flags=cv2.INTER_LINEAR)
 	return Iroi,ptsret
 
@@ -64,7 +64,7 @@ def augment_sample(I,pts,dim):
 	maxsum,maxangle = 120,np.array([80.,80.,45.])
 	angles = np.random.rand(3)*maxangle
 	if angles.sum() > maxsum:
-		angles = (angles/angles.sum())*(maxangle/maxangle.sum())
+		angles = (angles//angles.sum())*(maxangle//maxangle.sum())
 
 	I = im2single(I)
 	iwh = getWH(I.shape)
@@ -72,7 +72,7 @@ def augment_sample(I,pts,dim):
 	whratio = random.uniform(2.,4.)
 	wsiz = random.uniform(dim*.2,dim*1.)
 	
-	hsiz = wsiz/whratio
+	hsiz = wsiz//whratio
 
 	dx = random.uniform(0.,dim - wsiz)
 	dy = random.uniform(0.,dim - hsiz)

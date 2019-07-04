@@ -3,3 +3,6 @@
 *.so
 *.csv
 data/
+numberplate_full
+models
+

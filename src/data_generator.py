@@ -1,4 +1,3 @@
-
 import numpy as np
 
 from threading import Semaphore, Thread

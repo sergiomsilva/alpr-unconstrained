@@ -1,0 +1,62 @@
+Metadata-Version: 2.1
+Name: Keras
+Version: 2.2.4
+Summary: Deep Learning for humans
+Home-page: https://github.com/keras-team/keras
+Author: Francois Chollet
+Author-email: francois.chollet@gmail.com
+License: MIT
+Download-URL: https://github.com/keras-team/keras/tarball/2.2.4
+Platform: UNKNOWN
+Classifier: Development Status :: 5 - Production/Stable
+Classifier: Intended Audience :: Developers
+Classifier: Intended Audience :: Education
+Classifier: Intended Audience :: Science/Research
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Programming Language :: Python :: 2
+Classifier: Programming Language :: Python :: 2.7
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.6
+Classifier: Topic :: Software Development :: Libraries
+Classifier: Topic :: Software Development :: Libraries :: Python Modules
+Provides-Extra: tests
+Provides-Extra: visualize
+Requires-Dist: numpy (>=1.9.1)
+Requires-Dist: scipy (>=0.14)
+Requires-Dist: six (>=1.9.0)
+Requires-Dist: pyyaml
+Requires-Dist: h5py
+Requires-Dist: keras-applications (>=1.0.6)
+Requires-Dist: keras-preprocessing (>=1.0.5)
+Provides-Extra: tests
+Requires-Dist: pytest; extra == 'tests'
+Requires-Dist: pytest-pep8; extra == 'tests'
+Requires-Dist: pytest-xdist; extra == 'tests'
+Requires-Dist: pytest-cov; extra == 'tests'
+Requires-Dist: pytest-timeout; extra == 'tests'
+Requires-Dist: pandas; extra == 'tests'
+Requires-Dist: requests; extra == 'tests'
+Provides-Extra: visualize
+Requires-Dist: pydot (>=1.2.4); extra == 'visualize'
+
+Keras is a high-level neural networks API,
+written in Python and capable of running on top of
+TensorFlow, CNTK, or Theano.
+
+Use Keras if you need a deep learning library that:
+
+- Allows for easy and fast prototyping
+  (through user friendliness, modularity, and extensibility).
+- Supports both convolutional networks and recurrent networks,
+  as well as combinations of the two.
+- Runs seamlessly on CPU and GPU.
+
+Read the documentation at: https://keras.io/
+
+For a detailed overview of what makes Keras special, see:
+https://keras.io/why-use-keras/
+
+Keras is compatible with Python 2.7-3.6
+and is distributed under the MIT license.
+
+

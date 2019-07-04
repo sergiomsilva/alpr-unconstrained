@@ -1,0 +1,17 @@
+--2019-07-01 12:52:07--  http://www.inf.ufrgs.br/~smsilva/alpr-unconstrained/data/vehicle-detector/yolo-voc.weights
+Resolving www.inf.ufrgs.br (www.inf.ufrgs.br)... 143.54.11.16
+Connecting to www.inf.ufrgs.br (www.inf.ufrgs.br)|143.54.11.16|:80... connected.
+HTTP request sent, awaiting response... 200 OK
+Length: 202704260 (193M) [text/plain]
+Saving to: ‘data/vehicle-detector/yolo-voc.weights’
+
+yolo-voc.weights     30%[=====>              ]  58.12M  --.-KB/s    eta 6h 2m  yolo-voc.weights     30%[=====>              ]  58.12M  --.-KB/s    in 2h 35m  
+
+2019-07-01 15:27:58 (6.37 KB/s) - Read error at byte 60947063/202704260 (Connection timed out). Retrying.
+
+--2019-07-01 15:27:59--  (try: 2)  http://www.inf.ufrgs.br/~smsilva/alpr-unconstrained/data/vehicle-detector/yolo-voc.weights
+Connecting to www.inf.ufrgs.br (www.inf.ufrgs.br)|143.54.11.16|:80... connected.
+HTTP request sent, awaiting response... 416 Requested Range Not Satisfiable
+
+    The file is already fully retrieved; nothing to do.
+

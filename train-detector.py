@@ -30,7 +30,8 @@ def load_network(modelpath,input_dim):
 
 	output_shape = tuple([s.value for s in outputs.shape[1:]])
 	output_dim   = output_shape[1]
-	model_stride = input_dim / output_dim
+	model_stride = input_dim // output_dim
+	print (model_stride)
 
 	assert input_dim % output_dim == 0, \
 		'The output resolution must be divisible by the input resolution'
@@ -76,7 +77,7 @@ if __name__ == '__main__':
 	opt = getattr(keras.optimizers,args.optimizer)(lr=args.learning_rate)
 	model.compile(loss=loss, optimizer=opt)
 
-	print 'Checking input directory...'
+	print ('Checking input directory...')
 	Files = image_files_from_folder(train_dir)
 
 	Data = []
@@ -87,7 +88,7 @@ if __name__ == '__main__':
 			I = cv2.imread(file)
 			Data.append([I,L[0]])
 
-	print '%d images with labels found' % len(Data)
+	print ('%d images with labels found' % len(Data))
 
 	dg = DataGenerator(	data=Data, \
 						process_data_item_func=lambda x: process_data_item(x,dim,model_stride),\
@@ -99,27 +100,28 @@ if __name__ == '__main__':
 	dg.start()
 
 	Xtrain = np.empty((batch_size,dim,dim,3),dtype='single')
-	Ytrain = np.empty((batch_size,dim/model_stride,dim/model_stride,2*4+1))
+	print (dim//model_stride)
+	Ytrain = np.empty((batch_size,dim//model_stride,dim//model_stride,2*4+1))
 
 	model_path_backup = '%s/%s_backup' % (outdir,netname)
 	model_path_final  = '%s/%s_final'  % (outdir,netname)
 
 	for it in range(iterations):
 
-		print 'Iter. %d (of %d)' % (it+1,iterations)
+		print ('Iter. %d (of %d)' % (it+1,iterations))
 
 		Xtrain,Ytrain = dg.get_batch(batch_size)
 		train_loss = model.train_on_batch(Xtrain,Ytrain)
 
-		print '\tLoss: %f' % train_loss
+		print ('\tLoss: %f' % train_loss)
 
 		# Save model every 1000 iterations
 		if (it+1) % 1000 == 0:
-			print 'Saving model (%s)' % model_path_backup
+			print ('Saving model %s' % model_path_backup)
 			save_model(model,model_path_backup)
 
-	print 'Stopping data generator'
+	print ('Stopping data generator')
 	dg.stop()
 
-	print 'Saving model (%s)' % model_path_final
-	save_model(model,model_path_final)
+	print ('Saving model %s' % model_path_final)
+	save_model(model,model_path_final)	
