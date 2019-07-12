@@ -3,3 +3,7 @@
 *.so
 *.csv
 data/
+env/
+.vscode/
+.ipynb_checkpoints/
+tmp/
