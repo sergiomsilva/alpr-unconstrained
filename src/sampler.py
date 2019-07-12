@@ -12,7 +12,7 @@ def labels2output_map(label,lppts,dim,stride):
 
 	side = ((float(dim) + 40.)/2.)/stride # 7.75 when dim = 208 and stride = 16
 
-	outsize = dim/stride
+	outsize = int(dim/stride)
 	Y  = np.zeros((outsize,outsize,2*4+1),dtype='float32')
 	MN = np.array([outsize,outsize])
 	WH = np.array([dim,dim],dtype=float)
