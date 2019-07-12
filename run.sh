@@ -99,8 +99,8 @@ python license-plate-ocr.py $output_dir
 python gen-outputs.py $input_dir $output_dir > $csv_file
 
 # Clean files and draw output
-rm $output_dir/*_lp.png
-rm $output_dir/*car.png
-rm $output_dir/*_cars.txt
-rm $output_dir/*_lp.txt
-rm $output_dir/*_str.txt
+# rm $output_dir/*_lp.png
+# rm $output_dir/*car.png
+# rm $output_dir/*_cars.txt
+# rm $output_dir/*_lp.txt
+# rm $output_dir/*_str.txt
