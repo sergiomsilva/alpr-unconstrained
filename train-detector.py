@@ -49,6 +49,7 @@ def process_data_item(data_item,dim,model_stride):
 
 if __name__ == '__main__':
 	config = tensorflow.ConfigProto( device_count = {'GPU': 1 , 'CPU': 16} ) 
+	config.gpu_options.allow_growth = True
 	sess = tensorflow.Session(config=config) 
 	keras.backend.set_session(sess)
 	parser = argparse.ArgumentParser()
