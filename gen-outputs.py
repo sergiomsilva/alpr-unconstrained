@@ -9,7 +9,7 @@ from src.drawing_utils			import draw_label, draw_losangle, write2img
 from src.label 					import lread, Label, readShapes
 
 from pdb import set_trace as pause
-from time import sleep(20)
+from time import sleep
 
 YELLOW = (  0,255,255)
 RED    = (  0,  0,255)
