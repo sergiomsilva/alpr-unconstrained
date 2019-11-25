@@ -10,7 +10,7 @@ from src.utils 					import im2single
 from src.keras_utils 			import load_model, detect_lp
 from src.label 					import Shape, writeShapes
 from time import sleep
-
+import datetime
 def adjust_pts(pts,lroi):
 	return pts*lroi.wh().reshape((2,1)) + lroi.tl().reshape((2,1))
 
@@ -34,7 +34,7 @@ if __name__ == '__main__':
 		for i,img_path in enumerate(imgs_paths):
 
 			print ('\t Processing %s' % img_path)
-
+			start = datetime.datetime.now()
 			bname = splitext(basename(img_path))[0]
 			Ivehicle = cv2.imread(img_path)
 
@@ -54,11 +54,13 @@ if __name__ == '__main__':
 
 				cv2.imwrite('%s/%s_lp.png' % (output_dir,bname),Ilp*255.)
 				writeShapes('%s/%s_lp.txt' % (output_dir,bname),[s])
+			stop = datetime.datetime.now()
+			print(stop-start)
 
 	except:
 		traceback.print_exc()
 		sys.exit(1)
-	sleep(20)
+	sleep(10)
 	sys.exit(0)
 
 

@@ -11,7 +11,7 @@ from darknet.python.darknet import detect
 from src.label				import dknet_label_conversion
 from src.utils 				import nms
 from time import sleep
-
+import datetime
 if __name__ == '__main__':
 
 	try:
@@ -35,7 +35,7 @@ if __name__ == '__main__':
 		for i,img_path in enumerate(imgs_paths):
 
 			print( '\tScanning %s' % img_path)
-
+			start = datetime.datetime.now()
 			bname = basename(splitext(img_path)[0])
 
 			R,(width,height) = detect(ocr_net, ocr_meta, img_path.encode('utf-8') ,thresh=ocr_threshold, nms=None)
@@ -56,9 +56,11 @@ if __name__ == '__main__':
 			else:
 
 				print ('No characters found')
+			stop = datetime.datetime.now()
+			print(stop-start)
 
 	except:
 		traceback.print_exc()
 		sys.exit(1)
-	sleep(20)
+	sleep(10)
 	sys.exit(0)

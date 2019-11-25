@@ -81,6 +81,6 @@ if __name__ == '__main__':
 	except:
 		traceback.print_exc()
 		sys.exit(1)
-	sleep(20)
+	sleep(10)
 	sys.exit(0)
 	
