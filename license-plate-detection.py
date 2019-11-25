@@ -9,7 +9,7 @@ from os.path 					import splitext, basename
 from src.utils 					import im2single
 from src.keras_utils 			import load_model, detect_lp
 from src.label 					import Shape, writeShapes
-
+from time import sleep
 
 def adjust_pts(pts,lroi):
 	return pts*lroi.wh().reshape((2,1)) + lroi.tl().reshape((2,1))
@@ -58,7 +58,7 @@ if __name__ == '__main__':
 	except:
 		traceback.print_exc()
 		sys.exit(1)
-
+	sleep(20)
 	sys.exit(0)
 
 

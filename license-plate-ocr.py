@@ -10,7 +10,7 @@ from glob					import glob
 from darknet.python.darknet import detect
 from src.label				import dknet_label_conversion
 from src.utils 				import nms
-
+from time import sleep
 
 if __name__ == '__main__':
 
@@ -60,5 +60,5 @@ if __name__ == '__main__':
 	except:
 		traceback.print_exc()
 		sys.exit(1)
-
+	sleep(20)
 	sys.exit(0)

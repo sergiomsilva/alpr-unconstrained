@@ -9,7 +9,7 @@ from src.drawing_utils			import draw_label, draw_losangle, write2img
 from src.label 					import lread, Label, readShapes
 
 from pdb import set_trace as pause
-
+from time import sleep(20)
 
 YELLOW = (  0,255,255)
 RED    = (  0,  0,255)
@@ -57,5 +57,7 @@ for img_file in img_files:
 
 	cv2.imwrite('%s/%s_output.png' % (output_dir,bname),I)
 	sys.stdout.write('\n')
+
+sleep(20)
 
 
