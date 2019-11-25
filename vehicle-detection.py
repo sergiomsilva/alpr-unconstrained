@@ -11,6 +11,7 @@ from os 					import makedirs
 from src.utils 				import crop_region, image_files_from_folder
 from darknet.python.darknet import detect
 from time import sleep
+import datetime
 
 if __name__ == '__main__':
 
@@ -40,7 +41,7 @@ if __name__ == '__main__':
 		print ('Searching for vehicles using YOLO...')
 
 		for i,img_path in enumerate(imgs_paths):
-
+			start = datetime.datetime.now()
 			print ('\tScanning %s' % img_path)
 
 			bname = basename(splitext(img_path)[0].encode('utf-8'))
@@ -74,6 +75,8 @@ if __name__ == '__main__':
 					cv2.imwrite('%s/%s_%dcar.png' % (output_dir,bname,i),Icar)
 
 				lwrite('%s/%s_cars.txt' % (output_dir,bname),Lcars)
+			stop = datetime.datetime.now()
+			print(stop-start)
 
 	except:
 		traceback.print_exc()
