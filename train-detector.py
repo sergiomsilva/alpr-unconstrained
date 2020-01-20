@@ -28,7 +28,7 @@ def load_network(modelpath,input_dim):
 	inputs  = keras.layers.Input(shape=(input_dim,input_dim,3))
 	outputs = model(inputs)
 
-	output_shape = tuple([s.value for s in outputs.shape[1:]])
+	output_shape = tuple([s for s in outputs.shape[1:]])
 	output_dim   = output_shape[1]
 	model_stride = input_dim / output_dim
 
@@ -48,10 +48,10 @@ def process_data_item(data_item,dim,model_stride):
 
 
 if __name__ == '__main__':
-	config = tensorflow.ConfigProto( device_count = {'GPU': 1 , 'CPU': 16} ) 
+	config = tensorflow.compat.v1.ConfigProto( device_count = {'GPU': 2 , 'CPU': 16} ) 
 	config.gpu_options.allow_growth = True
-	sess = tensorflow.Session(config=config) 
-	keras.backend.set_session(sess)
+	sess = tensorflow.compat.v1.Session(config=config) 
+	tensorflow.compat.v1.keras.backend.set_session(sess)
 	parser = argparse.ArgumentParser()
 	parser.add_argument('-m' 		,'--model'			,type=str   , required=True		,help='Path to previous model')
 	parser.add_argument('-n' 		,'--name'			,type=str   , required=True		,help='Model name')
