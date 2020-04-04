@@ -30,11 +30,11 @@ if __name__ == '__main__':
 
 		imgs_paths = sorted(glob('%s/*lp.png' % output_dir))
 
-		print 'Performing OCR...'
+		print('Performing OCR...')
 
 		for i,img_path in enumerate(imgs_paths):
 
-			print '\tScanning %s' % img_path
+			print('\tScanning %s' % img_path)
 
 			bname = basename(splitext(img_path)[0])
 
@@ -51,11 +51,11 @@ if __name__ == '__main__':
 				with open('%s/%s_str.txt' % (output_dir,bname),'w') as f:
 					f.write(lp_str + '\n')
 
-				print '\t\tLP: %s' % lp_str
+				print('\t\tLP: %s' % lp_str)
 
 			else:
 
-				print 'No characters found'
+				print('No characters found')
 
 	except:
 		traceback.print_exc()

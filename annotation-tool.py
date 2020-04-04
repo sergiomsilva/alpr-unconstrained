@@ -227,7 +227,7 @@ def displayAllShapes(disp,shapes,selected,typing_mode):
 if __name__ == '__main__':
 
 	if len(sys.argv) < 4:
-		print __doc__
+		print(__doc__)
 		sys.exit()
 
 	maxW = int(sys.argv[1])
@@ -343,19 +343,19 @@ if __name__ == '__main__':
 					typing_mode = True
 
 				if key == key_append_vertex:
-					print 'Append vertex'
+					print('Append vertex')
 					shapes[selected].appendSide(disp.getMouseCenterRelative())
 
 				if key == key_remove_last_vertex:
-					print 'Remove last vertex'
+					print('Remove last vertex')
 					shapes[selected].removeLast()
 
 				if key == key_change_closest_vertex:
-					print 'Change closest vertex'
+					print('Change closest vertex')
 					shapes[selected].changeClosest(disp.getMouseCenterRelative())
 
 				if key in key_delete_selected_shape:
-					print 'Delete closest vertex'
+					print('Delete closest vertex')
 					del shapes[selected]
 					pt = disp.getMouseCenterRelative()
 					selected = selectClosest(shapes,pt)
@@ -364,12 +364,12 @@ if __name__ == '__main__':
 					shapes[selected].shiftPts()
 
 			if key == key_create_new_shape:
-				print 'Create new shape'
+				print('Create new shape')
 				shapes.append(ShapeDisplay())
 				selected = len(shapes)-1
 
 			if key == key_select_closest_shape:
-				print 'Select closest'
+				print('Select closest')
 				pt = disp.getMouseCenterRelative()
 				selected = selectClosest(shapes,pt)
 					
