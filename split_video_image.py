@@ -50,5 +50,5 @@ for out_file in os.listdir(out_dir):
         os.remove("%s/%s" % (out_dir, out_file))
 
 combine_video(out_dir, out_video)
-shutil.rmtree(in_dir)
-shutil.rmtree(out_dir)
+#shutil.rmtree(in_dir)
+#shutil.rmtree(out_dir)
