@@ -8,7 +8,7 @@ def split_video(in_video, out_dir):
 	count = 0
 
 	while success:
-		cv2.imwrite("%s/v%06d.jpg" % (out_dir, count), image)
+		cv2.imwrite("%s/v%09d.jpg" % (out_dir, count), image)
 		success, image = vidcap.read()
 		count += 1
 
