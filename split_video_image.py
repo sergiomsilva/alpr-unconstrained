@@ -16,7 +16,7 @@ def split_video(in_video, out_dir):
 
 def get_fps(in_video):
 	vidcap = cv2.VideoCapture(in_video)
-	return vidcap.get(cv2.cv.CV_CAP_PROP_FPS)
+	return vidcap.get(cv2.CAP_PROP_FPS)
 
 def combine_video(in_dir, fps, out_video):
 	images = [f for f in os.listdir(in_dir)]
@@ -24,7 +24,7 @@ def combine_video(in_dir, fps, out_video):
 	size = (img.shape[1], img.shape[0])
 	out = cv2.VideoWriter(out_video, cv2.VideoWriter_fourcc(*'mp4v'), fps, size)
 	images.sort()
-	
+
 	for image in images:
 		img = cv2.imread("%s/%s" % (in_dir, image))
 		out.write(img)
