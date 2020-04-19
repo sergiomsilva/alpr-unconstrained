@@ -14,11 +14,15 @@ def split_video(in_video, out_dir):
 		success, image = vidcap.read()
 		count += 1
 
-def combine_video(in_dir, out_video):
+def get_fps(in_video):
+	vidcap = cv2.VideoCapture(in_video)
+	return vidcap.get(cv2.cv.CV_CAP_PROP_FPS)
+
+def combine_video(in_dir, fps, out_video):
 	images = [f for f in os.listdir(in_dir)]
 	img = cv2.imread("%s/%s" % (in_dir, images[0]))
 	size = (img.shape[1], img.shape[0])
-	out = cv2.VideoWriter(out_video, cv2.VideoWriter_fourcc(*'mp4v'), 30, size)
+	out = cv2.VideoWriter(out_video, cv2.VideoWriter_fourcc(*'mp4v'), fps, size)
 	images.sort()
 	
 	for image in images:
@@ -32,33 +36,39 @@ if len(sys.argv) < 2:
 	quit()
 
 start_time = time.time()
-vid_name = sys.argv[1]
+in_video = sys.argv[1]
+out_video = "%s_tagged.mp4" % (in_video)
 in_dir = "tmp_in"
 out_dir = "tmp_out"
-
-in_video = vid_name
-out_video = "%s_tagged.mp4" % (vid_name)
 lp_model="data/lp-detector/wpod-net_update1.h5"
+fps = get_fps(in_video)
 
 if os.path.exists(in_dir):
+	print("Removing old tmp files")
 	shutil.rmtree(in_dir)
 	shutil.rmtree(out_dir)
 os.mkdir(in_dir)
 os.mkdir(out_dir)
 
+print("Splitting video")
 split_video(in_video, in_dir)
 
+print("Processing images")
 os.system("python vehicle-detection.py %s %s" % (in_dir, out_dir))
 os.system("python license-plate-detection.py %s %s" % (out_dir, lp_model))
 os.system("python license-plate-ocr.py %s" % (out_dir))
 os.system("python gen-outputs.py %s %s > /dev/null" % (in_dir, out_dir))
 
+print("Removing excessive images")
 for out_file in os.listdir(out_dir):
     if not out_file.endswith("output.png"):
         os.remove("%s/%s" % (out_dir, out_file))
 
-combine_video(out_dir, out_video)
-#shutil.rmtree(in_dir)
-#shutil.rmtree(out_dir)
+print("Combining video")
+combine_video(out_dir, fps, out_video)
+
+print("Removing tmp files")
+shutil.rmtree(in_dir)
+shutil.rmtree(out_dir)
 
 print("Execution time: %fs" % (time.time() - start_time))
