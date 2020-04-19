@@ -51,7 +51,7 @@ split_video(in_video, in_dir)
 os.system("python vehicle-detection.py %s %s" % (in_dir, out_dir))
 os.system("python license-plate-detection.py %s %s" % (out_dir, lp_model))
 os.system("python license-plate-ocr.py %s" % (out_dir))
-os.system("python gen-outputs.py %s %s" % (in_dir, out_dir))
+os.system("python gen-outputs.py %s %s > /dev/null" % (in_dir, out_dir))
 
 for out_file in os.listdir(out_dir):
     if not out_file.endswith("output.png"):
