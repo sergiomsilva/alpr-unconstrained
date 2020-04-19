@@ -2,6 +2,7 @@ import cv2
 import os
 import shutil
 import sys
+import time
 
 def split_video(in_video, out_dir):
 	vidcap = cv2.VideoCapture(in_video)
@@ -29,6 +30,7 @@ if len(sys.argv) < 2:
 	print("Pls provide input video name (with extension)")
 	quit()
 
+start_time = time.time()
 vid_name = sys.argv[1]
 in_dir = "tmp_in"
 out_dir = "tmp_out"
@@ -36,7 +38,6 @@ out_dir = "tmp_out"
 in_video = vid_name
 out_video = "%s_tagged.mp4" % (vid_name)
 lp_model="data/lp-detector/wpod-net_update1.h5"
-csv_file="samples/results.csv"
 
 if os.path.exists(in_dir):
 	shutil.rmtree(in_dir)
@@ -49,7 +50,7 @@ split_video(in_video, in_dir)
 os.system("python vehicle-detection.py %s %s" % (in_dir, out_dir))
 os.system("python license-plate-detection.py %s %s" % (out_dir, lp_model))
 os.system("python license-plate-ocr.py %s" % (out_dir))
-os.system("python gen-outputs.py %s %s > %s" % (in_dir, out_dir, csv_file))
+os.system("python gen-outputs.py %s %s" % (in_dir, out_dir))
 
 for out_file in os.listdir(out_dir):
     if not out_file.endswith("output.png"):
@@ -58,3 +59,5 @@ for out_file in os.listdir(out_dir):
 combine_video(out_dir, out_video)
 #shutil.rmtree(in_dir)
 #shutil.rmtree(out_dir)
+
+print("Execution time: %fs" % (time.time() - start_time))
