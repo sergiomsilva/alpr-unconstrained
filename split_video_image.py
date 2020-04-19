@@ -24,11 +24,16 @@ def combine_video(in_dir, out_video):
 
 	out.release()
 
+if len(sys.argv) < 2:
+	print("Pls provide input video name (with extension)")
+	quit()
+
+vid_name = sys.argv[1]
 in_dir = "tmp_in"
 out_dir = "tmp_out"
 
-in_video = "samples/sample1_short.mp4"
-out_video = "samples/sample1_short_tagged.mp4"
+in_video = "samples/%s" % (vid_name)
+out_video = "samples/%s_tagged.mp4" % (vid_name)
 lp_model="data/lp-detector/wpod-net_update1.h5"
 csv_file="samples/results.csv"
 
