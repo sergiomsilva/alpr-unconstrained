@@ -1,6 +1,7 @@
 import cv2
 import os
 import shutil
+import sys
 
 def split_video(in_video, out_dir):
 	vidcap = cv2.VideoCapture(in_video)
