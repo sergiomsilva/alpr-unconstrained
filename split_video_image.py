@@ -33,8 +33,8 @@ vid_name = sys.argv[1]
 in_dir = "tmp_in"
 out_dir = "tmp_out"
 
-in_video = "samples/%s" % (vid_name)
-out_video = "samples/%s_tagged.mp4" % (vid_name)
+in_video = vid_name
+out_video = "%s_tagged.mp4" % (vid_name)
 lp_model="data/lp-detector/wpod-net_update1.h5"
 csv_file="samples/results.csv"
 
