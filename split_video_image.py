@@ -19,7 +19,8 @@ def combine_video(in_dir, out_video):
 	img = cv2.imread("%s/%s" % (in_dir, images[0]))
 	size = (img.shape[1], img.shape[0])
 	out = cv2.VideoWriter(out_video, cv2.VideoWriter_fourcc(*'mp4v'), 30, size)
-
+	images.sort()
+	
 	for image in images:
 		img = cv2.imread("%s/%s" % (in_dir, image))
 		out.write(img)
