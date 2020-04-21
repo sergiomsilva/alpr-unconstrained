@@ -27,7 +27,18 @@ In order to easily run the code, you must have installed the Keras framework wit
 $ cd darknet && make
 ```
 
-**The current version was tested in an Ubuntu 16.04 machine, with Keras 2.2.4, TensorFlow 1.5.0, OpenCV 2.4.9, NumPy 1.14 and Python 2.7.**
+~**The current version was tested in an Ubuntu 16.04 machine, with Keras 2.2.4, TensorFlow 1.5.0, OpenCV 2.4.9, NumPy 1.14 and Python 2.7.**~
+
+Do yourself a favor and **don't** use CUDA 10.1 like tensorflow website recommends, because it doesn't work with tensorflow. Verified config is:
+* Ubuntu 18.04
+* nvidia-driver-430
+* CUDA 10.0 (installed from .deb)
+* libcudnn7_7.4.2.24-1 (installed from .deb)
+* python 2.7
+* tensorflow-gpu 1.14.0
+* keras 2.3.1
+* opencv-python 4.2.0.32
+* numpy 1.16.6
 
 ## Download Models
 
