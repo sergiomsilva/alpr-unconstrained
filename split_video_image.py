@@ -71,8 +71,8 @@ os.system("python gen-outputs.py %s %s > /dev/null" % (in_dir, out_dir))
 
 print("Removing excessive images")
 for out_file in os.listdir(out_dir):
-    if not out_file.endswith("output.png"):
-        os.remove("%s/%s" % (out_dir, out_file))
+	if not out_file.endswith("output.png"):
+		os.remove("%s/%s" % (out_dir, out_file))
 
 print("Combining video")
 combine_video(out_dir, fps, out_video)
@@ -82,4 +82,3 @@ shutil.rmtree(in_dir)
 shutil.rmtree(out_dir)
 
 print("Execution time: %fs" % (time.time() - start_time))
-

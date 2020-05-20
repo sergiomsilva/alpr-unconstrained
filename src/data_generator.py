@@ -1,4 +1,3 @@
-
 import numpy as np
 
 from threading import Semaphore, Thread
@@ -7,13 +6,12 @@ from random import choice, randint
 from pdb import set_trace as pause
 
 class DataGenerator(object):
-
-	def __init__(	self, data, process_data_item_func, xshape, yshape, \
-					data_item_selector	= choice, 	\
-					nthreads			= 2,		\
-					pool_size			= 1000,		\
-					min_nsamples		= 1,		\
-					dtype 				= 'single' ):
+	def __init__(self, data, process_data_item_func, xshape, yshape, \
+				data_item_selector = choice, \
+				nthreads = 2, \
+				pool_size = 1000, \
+				min_nsamples = 1, \
+				dtype = 'single' ):
 
 		assert pool_size >= min_nsamples, \
 			'Min. samples must be equal or less than pool_size'
@@ -47,8 +45,7 @@ class DataGenerator(object):
 		d = self._data_item_selector(self._data)
 		return self._process_data_item(d)
 
-	def _insert_data(self,x,y):
-
+	def _insert_data(self, x, y):
 		self._sem.acquire()
 
 		if self._count < self._pool_size:
@@ -56,7 +53,7 @@ class DataGenerator(object):
 			self._Y[self._count] = y
 			self._count += 1
 		else:
-			idx = randint(0,self._pool_size-1)
+			idx = randint(0, self._pool_size-1)
 			self._X[idx] = x
 			self._Y[idx] = y
 
@@ -65,7 +62,7 @@ class DataGenerator(object):
 	def _run(self):
 		while True:
 			x,y = self._compute_sample()
-			self._insert_data(x,y)
+			self._insert_data(x, y)
 			if self._stop:
 				break
 
@@ -82,7 +79,6 @@ class DataGenerator(object):
 			thread.start()
 
 	def get_batch(self,N):
-
 		# Wait until the buffer was filled with the minimum
 		# number of samples
 		while self._count < self._min_nsamples:
@@ -95,6 +91,4 @@ class DataGenerator(object):
 			X[i] = self._X[idx]
 			Y[i] = self._Y[idx]
 		self._sem.release()
-		return X,Y
-
-
+		return X, Y
