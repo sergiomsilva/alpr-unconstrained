@@ -20,14 +20,15 @@ if __name__ == '__main__':
 	try:
 		
 		input_dir  = sys.argv[1]
-		output_dir = input_dir
-
+		output_dir = input_dir+"/output"
+		if not os.path.exists(output_dir):
+			os.mkdir(output_dir)		
 		lp_threshold = .5
 
 		wpod_net_path = sys.argv[2]
 		wpod_net = load_model(wpod_net_path)
 
-		imgs_paths = glob('%s/*car.png' % input_dir)
+		imgs_paths = glob('%s/*.png' % input_dir)
 
 		print ('Searching for license plates using WPOD-NET')
 
