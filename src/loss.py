@@ -5,7 +5,7 @@ import tensorflow as tf
 def logloss(Ptrue,Pred,szs,eps=10e-10):
 	b,h,w,ch = szs
 	Pred = tf.clip_by_value(Pred,eps,1.)
-	Pred = -tf.log(Pred)
+	Pred = -tf.math.log(Pred)
 	Pred = Pred*Ptrue
 	Pred = tf.reshape(Pred,(b,h*w*ch))
 	Pred = tf.reduce_sum(Pred,1)
