@@ -7,3 +7,7 @@ env/
 .vscode/
 .ipynb_checkpoints/
 tmp/
+*.h5
+*.json
+train/
+out/
