@@ -1,0 +1,11 @@
+version: "2.3"
+
+services:
+  alpr:
+    build: .
+    runtime: nvidia
+    volumes:
+      - ./samples:/home/alpr/samples
+    command: /bin/bash
+    stdin_open: true
+    tty: true
