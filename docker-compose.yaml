@@ -9,5 +9,3 @@ services:
     command: /bin/bash
     stdin_open: true
     tty: true
-    environment:
-      - CUDA_VISIBLE_DEVICES=3
