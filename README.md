@@ -19,7 +19,34 @@ If you use results produced by our code in any publication, please cite our pape
   month={Sep},}
 ```
 
-## Requirements
+## Install with Docker
+
+Using Docker helps you to create an environment tailor-fit for the project without needing to change anything on your computer.
+### Requirements
+Install [Docker](https://www.docker.com/get-started) and [docker-compose](https://docs.docker.com/compose/install/) on your machine.  
+Prepare Docker for running on GPU: edit `/etc/docker/daemon.json` by adding the first level key `"default-runtime": "nvidia"`.
+Restart docker daemon (`sudo service docker restart`)
+
+### Install
+```bash
+cd alpr-unconstrained
+
+# build docker environment
+docker-compose build
+
+# run & enter docker container
+docker-compose run --rm alpr
+
+# exit
+ctrl+D
+```
+Then inside the container follow the same procedure as in the section _Running a simple script_.
+> You will have root privileges inside the container so proceed with caution.  
+Currently the docker-compose.yaml synchronizes only the `samples` folder of your local computer with the container `samples` folder. If you wish to have other folders from your local computer synchronized with the container, you need to edit [volumes](https://docs.docker.com/storage/volumes/) in the docker-compose.yaml.
+
+## Without Docker
+
+### Requirements
 
 In order to easily run the code, you must have installed the Keras framework with TensorFlow backend. The Darknet framework is self-contained in the "darknet" folder and must be compiled before running the tests. To build Darknet just type "make" in "darknet" folder:
 
@@ -29,7 +56,7 @@ $ cd darknet && make
 
 **The current version was tested in an Ubuntu 16.04 machine, with Keras 2.2.4, TensorFlow 1.5.0, OpenCV 2.4.9, NumPy 1.14 and Python 2.7.**
 
-## Download Models
+### Download Models
 
 After building the Darknet framework, you must execute the "get-networks.sh" script. This will download all the trained models:
 
@@ -45,7 +72,7 @@ Use the script "run.sh" to run our ALPR approach. It requires 3 arguments:
 * __CSV file (-c):__ specify an output CSV file.
 
 ```shellscript
-$ bash get-networks.sh && bash run.sh -i samples/test -o /tmp/output -c /tmp/output/results.csv
+$ bash run.sh -i samples/test -o /tmp/output -c /tmp/output/results.csv
 ```
 
 ## Training the LP detector
