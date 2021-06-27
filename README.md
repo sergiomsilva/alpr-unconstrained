@@ -1,4 +1,4 @@
-# ALPR in Unscontrained Scenarios
+# ALPR in Unconstrained Scenarios
 
 ## Introduction
 
