@@ -21,10 +21,16 @@ if __name__ == '__main__':
 
 		vehicle_threshold = .5
 
-		vehicle_weights = 'data/vehicle-detector/yolo-voc.weights'
-		vehicle_netcfg  = 'data/vehicle-detector/yolo-voc.cfg'
-		vehicle_dataset = 'data/vehicle-detector/voc.data'
+		base=b'/media/raghav/e34065bb-bd49-4111-ba3a-96160e27ffd0/raghu/cctv/darknet/'
+		vehicle_weights = base + b'yolov4.weights'
+		vehicle_netcfg  = base + b'cfg/yolov4.cfg'
+		vehicle_dataset = b'data/vehicle-detector/coco.data'
 
+		vehicle_weights = b'data/vehicle-detector/yolo-voc.weights'
+		vehicle_netcfg  = b'data/vehicle-detector/yolo-voc.cfg'
+		vehicle_dataset = b'data/vehicle-detector/voc.data'
+
+		# import pdb; pdb.set_trace()
 		vehicle_net  = dn.load_net(vehicle_netcfg, vehicle_weights, 0)
 		vehicle_meta = dn.load_meta(vehicle_dataset)
 
@@ -34,19 +40,19 @@ if __name__ == '__main__':
 		if not isdir(output_dir):
 			makedirs(output_dir)
 
-		print 'Searching for vehicles using YOLO...'
+		print('Searching for vehicles using YOLO...')
 
 		for i,img_path in enumerate(imgs_paths):
 
-			print '\tScanning %s' % img_path
+			print(('\tScanning %s' % img_path))
 
 			bname = basename(splitext(img_path)[0])
 
 			R,_ = detect(vehicle_net, vehicle_meta, img_path ,thresh=vehicle_threshold)
 
-			R = [r for r in R if r[0] in ['car','bus']]
+			R = [r for r in R if r[0] in [b'car',b'bus']]
 
-			print '\t\t%d cars found' % len(R)
+			print(('\t\t%d cars found' % len(R)))
 
 			if len(R):
 
