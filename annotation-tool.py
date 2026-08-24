@@ -52,7 +52,7 @@ class ShapeDisplay(Shape):
 
 	def shiftPts(self):
 		if self.pts.shape[1] > 1:
-			idx = range(1,self.pts.shape[1]) + [0]
+			idx = list(range(1,self.pts.shape[1])) + [0]
 			self.pts = self.pts[...,idx]
 
 	def getSquare(self):
