@@ -5,9 +5,20 @@ import sys, os
 def main():
     if len(sys.argv) > 1 and sys.argv[1] == 'cli':
         # CLI 三阶段流水线模式
-        from vehicle_detection import main as vd
-        from license_plate_detection import main as lpd
-        from license_plate_ocr import main as ocr
+        # 文件名带连字符, 不能常规 import, 用 importlib 加载
+        import importlib.util
+
+        def load_module(filename):
+            path = os.path.join(os.path.dirname(os.path.abspath(__file__)), filename)
+            spec = importlib.util.spec_from_file_location(
+                filename.replace('-', '_').replace('.py', ''), path)
+            mod = importlib.util.module_from_spec(spec)
+            spec.loader.exec_module(mod)
+            return mod
+
+        vd = load_module('vehicle-detection.py').main
+        lpd = load_module('license-plate-detection.py').main
+        ocr = load_module('license-plate-ocr.py').main
         print('=' * 60)
         print('  ALPR CLI 流水线 (PyCharm)')
         print('=' * 60)
