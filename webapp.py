@@ -138,7 +138,8 @@ def process_image(image_path, session_id):
     timing['annotation'] = time.time() - t0
     timing['total'] = sum(timing.values())
     return {'session_id': session_id, 'vehicle_count': len(vehicles), 'plates': plates,
-            'timing': {k: '%.2fs' % v for k, v in timing.items()}, 'annotated_image': 'annotated.jpg'}
+            'timing': {k: '%.2fs' % v for k, v in timing.items()}, 'annotated_image': 'annotated.jpg',
+            'uploaded_filename': os.path.basename(image_path)}
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
@@ -152,7 +153,8 @@ def index():
             sid = uuid.uuid4().hex[:12]
             path = os.path.join(app.config['UPLOAD_FOLDER'], secure_filename('%s_%s' % (sid, file.filename)))
             file.save(path)
-            return render_template('index.html', result=process_image(path, sid))
+            result = process_image(path, sid)
+            return render_template('index.html', result=result, uploaded_filename=result['uploaded_filename'])
         except Exception as e:
             log.exception("Processing failed")
             return render_template('index.html', error='处理失败: %s' % str(e))
@@ -162,8 +164,8 @@ def index():
 def serve_output(session_id, filename):
     return send_from_directory(os.path.join(app.config['UPLOAD_FOLDER'], session_id), filename)
 
-@app.route('/upload/<session_id>/<filename>')
-def serve_upload(session_id, filename):
+@app.route('/upload/<filename>')
+def serve_upload_file(filename):
     return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
 
 @app.route('/health')
