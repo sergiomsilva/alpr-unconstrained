@@ -165,8 +165,8 @@
     <div class="result-grid">
       <div>
         <p style="font-size:13px;color:var(--muted);margin-bottom:6px;">原始图片</p>
-        <img class="result-img" src="{{ url_for('serve_upload', session_id=result.session_id, filename='_') | replace('_', result.session_id + '_' + 'upload') }}" 
-             onerror="this.parentElement.innerHTML='<p style=color:var(--muted);font-size:13px;>❌ 原始图片不可用</p>'">
+        <img class="result-img" src="{{ url_for('serve_upload_file', filename=uploaded_filename) }}"
+             onerror="this.parentElement.innerHTML='<p style=color:var(--muted);font-size:13px;>原始图片不可用</p>'">
       </div>
       <div>
         <p style="font-size:13px;color:var(--muted);margin-bottom:6px;">标注结果</p>
