@@ -81,7 +81,7 @@ def crop_region(I,label,bg=0.5):
 
 	outsize = (outwh[1],outwh[0],ch) if ch > 1 else (outwh[1],outwh[0])
 	if (np.array(outsize) < 0).any():
-		pause()
+		raise ValueError('Invalid crop region: negative output size %s' % (outsize,))
 	Iout  = np.zeros(outsize,dtype=I.dtype) + bg
 
 	offset 	= np.minimum(tl,0)*(-1)
@@ -97,20 +97,6 @@ def hsv_transform(I,hsv_modifier):
 	I = cv2.cvtColor(I,cv2.COLOR_BGR2HSV)
 	I = I + hsv_modifier
 	return cv2.cvtColor(I,cv2.COLOR_HSV2BGR)
-
-def IOU(tl1,br1,tl2,br2):
-	wh1,wh2 = br1-tl1,br2-tl2
-	assert((wh1>=.0).all() and (wh2>=.0).all())
-	
-	intersection_wh = np.maximum(np.minimum(br1,br2) - np.maximum(tl1,tl2),0.)
-	intersection_area = np.prod(intersection_wh)
-	area1,area2 = (np.prod(wh1),np.prod(wh2))
-	union_area = area1 + area2 - intersection_area;
-	return intersection_area/union_area
-
-def IOU_centre_and_dims(cc1,wh1,cc2,wh2):
-	return IOU(cc1-wh1/2.,cc1+wh1/2.,cc2-wh2/2.,cc2+wh2/2.)
-
 
 def show(I,wname='Display'):
 	cv2.imshow(wname, I)
