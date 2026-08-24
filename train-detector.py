@@ -18,11 +18,11 @@ from src.data_generator import DataGenerator
 
 def load_network(modelpath, input_dim):
     model = load_model(modelpath)
-    inputs = None
     import keras
     inputs = keras.layers.Input(shape=(input_dim, input_dim, 3))
     outputs = model(inputs)
-    output_shape = tuple([s.value for s in outputs.shape[1:]])
+    # Keras 3: shape dims are plain ints / None, no .value attribute anymore
+    output_shape = tuple(int(s) if s is not None else None for s in outputs.shape[1:])
     output_dim = output_shape[1]
     model_stride = input_dim / output_dim
     assert input_dim % output_dim == 0, 'The output resolution must be divisible by the input resolution'
