@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>车牌识别 ALPR Web UI</title>
+<style>
+  :root {
+    --bg: #0d1117;
+    --surface: #161b22;
+    --border: #30363d;
+    --text: #e6edf3;
+    --muted: #8b949e;
+    --accent: #58a6ff;
+    --green: #3fb950;
+    --yellow: #d29922;
+    --red: #f85149;
+    --radius: 8px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: var(--bg); color: var(--text); min-height: 100vh;
+  }
+  .container { max-width: 960px; margin: 0 auto; padding: 24px 16px; }
+  header {
+    text-align: center; padding: 32px 0 24px;
+    border-bottom: 1px solid var(--border); margin-bottom: 32px;
+  }
+  header h1 { font-size: 28px; font-weight: 600; }
+  header h1 span { color: var(--accent); }
+  header p { color: var(--muted); margin-top: 6px; font-size: 14px; }
+  .card {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 24px; margin-bottom: 20px;
+  }
+  .card h2 { font-size: 16px; font-weight: 600; margin-bottom: 16px; }
+
+  /* Upload */
+  .upload-zone {
+    border: 2px dashed var(--border); border-radius: var(--radius);
+    padding: 48px 24px; text-align: center; cursor: pointer;
+    transition: border-color .2s, background .2s;
+    position: relative;
+  }
+  .upload-zone:hover, .upload-zone.dragover {
+    border-color: var(--accent); background: rgba(88,166,255,.05);
+  }
+  .upload-zone input[type="file"] {
+    position: absolute; inset: 0; opacity: 0; cursor: pointer;
+  }
+  .upload-zone .icon { font-size: 48px; margin-bottom: 12px; }
+  .upload-zone .text { color: var(--muted); font-size: 14px; }
+  .upload-zone .text strong { color: var(--accent); }
+  .upload-preview { display: none; margin-top: 16px; }
+  .upload-preview img {
+    max-width: 100%; max-height: 400px; border-radius: var(--radius);
+    border: 1px solid var(--border);
+  }
+
+  /* Button */
+  .btn {
+    display: inline-block; padding: 10px 28px; border: none;
+    border-radius: var(--radius); font-size: 15px; font-weight: 600;
+    cursor: pointer; transition: all .2s;
+  }
+  .btn-primary {
+    background: var(--accent); color: #fff;
+  }
+  .btn-primary:hover { filter: brightness(1.15); }
+  .btn-primary:disabled { opacity: .5; cursor: not-allowed; filter: none; }
+  .btn-row { text-align: center; margin-top: 20px; }
+
+  /* Spinner */
+  .spinner { display: none; margin-left: 8px; vertical-align: middle; }
+  .spinner.show { display: inline-block; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .spinner::after {
+    content: ''; display: inline-block; width: 16px; height: 16px;
+    border: 2px solid rgba(255,255,255,.3); border-top-color: #fff;
+    border-radius: 50%; animation: spin .6s linear infinite;
+  }
+
+  /* Results */
+  .result-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  @media (max-width: 640px) { .result-grid { grid-template-columns: 1fr; } }
+  .result-img { width: 100%; border-radius: var(--radius); border: 1px solid var(--border); }
+  .stat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px,1fr)); gap: 12px; }
+  .stat-item {
+    background: var(--bg); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 14px; text-align: center;
+  }
+  .stat-item .value { font-size: 22px; font-weight: 700; color: var(--accent); }
+  .stat-item .label { font-size: 12px; color: var(--muted); margin-top: 4px; }
+  .plate-card {
+    background: var(--bg); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 14px; margin-bottom: 10px;
+    display: flex; align-items: center; gap: 14px;
+  }
+  .plate-card img { width: 120px; height: 40px; object-fit: contain; border-radius: 4px; background: #000; }
+  .plate-card .text { font-size: 20px; font-weight: 700; letter-spacing: 3px; font-family: monospace; }
+  .plate-card .conf { font-size: 12px; color: var(--green); }
+  .error {
+    background: rgba(248,81,73,.1); border: 1px solid var(--red);
+    border-radius: var(--radius); padding: 12px 16px; margin-bottom: 16px;
+    color: var(--red); font-size: 14px;
+  }
+  .footer { text-align: center; color: var(--muted); font-size: 12px; padding: 24px 0; }
+  .footer a { color: var(--accent); text-decoration: none; }
+</style>
+</head>
+<body>
+<div class="container">
+  <header>
+    <h1>🚗 <span>ALPR</span> 车牌识别</h1>
+    <p>上传一张车辆图片，自动检测车牌并识别号码</p>
+  </header>
+
+  {% if error %}
+  <div class="error">{{ error }}</div>
+  {% endif %}
+
+  <form method="post" enctype="multipart/form-data" id="uploadForm">
+    <div class="card">
+      <h2>📷 选择图片</h2>
+      <div class="upload-zone" id="dropZone">
+        <input type="file" name="image" accept="image/png,image/jpeg" id="fileInput">
+        <div class="icon">📁</div>
+        <div class="text">拖拽图片到这里，或 <strong>点击选择</strong></div>
+        <div class="text" style="margin-top:4px;font-size:12px;">支持 JPG / PNG 格式</div>
+        <div class="upload-preview" id="preview">
+          <img id="previewImg" src="" alt="预览">
+        </div>
+      </div>
+      <div class="btn-row">
+        <button type="submit" class="btn btn-primary" id="submitBtn">
+          🔍 开始识别
+          <span class="spinner" id="spinner"></span>
+        </button>
+      </div>
+    </div>
+  </form>
+
+  {% if result %}
+  <div class="card">
+    <h2>📊 识别结果</h2>
+    <div class="stat-grid">
+      <div class="stat-item">
+        <div class="value">{{ result.vehicle_count }}</div>
+        <div class="label">检测车辆</div>
+      </div>
+      <div class="stat-item">
+        <div class="value">{{ result.plates|length }}</div>
+        <div class="label">识别车牌</div>
+      </div>
+      <div class="stat-item">
+        <div class="value">{{ result.timing.total }}</div>
+        <div class="label">处理时间</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>🖼️ 检测结果</h2>
+    <div class="result-grid">
+      <div>
+        <p style="font-size:13px;color:var(--muted);margin-bottom:6px;">原始图片</p>
+        <img class="result-img" src="{{ url_for('serve_upload_file', filename=uploaded_filename) }}"
+             onerror="this.parentElement.innerHTML='<p style=color:var(--muted);font-size:13px;>原始图片不可用</p>'">
+      </div>
+      <div>
+        <p style="font-size:13px;color:var(--muted);margin-bottom:6px;">标注结果</p>
+        <img class="result-img" src="{{ url_for('serve_output', session_id=result.session_id, filename=result.annotated_image) }}"
+             onerror="this.parentElement.innerHTML='<p style=color:var(--muted);font-size:13px;>❌ 标注图片不可用</p>'">
+      </div>
+    </div>
+  </div>
+
+  {% if result.plates %}
+  <div class="card">
+    <h2>🔤 车牌号码</h2>
+    {% for p in result.plates %}
+    <div class="plate-card">
+      <img src="{{ url_for('serve_output', session_id=result.session_id, filename=p.lp_image) }}"
+           alt="车牌 {{ loop.index }}">
+      <div>
+        <div class="text">{{ p.text if p.text else '未识别' }}</div>
+        {% if p.confidence is defined %}
+        <div class="conf">置信度: {{ '%.0f%%' | format(p.confidence * 100) }}</div>
+        {% endif %}
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+  {% endif %}
+
+  <div class="card">
+    <h2>⏱️ 各阶段耗时</h2>
+    <table style="width:100%;border-collapse:collapse;font-size:14px;">
+      {% for stage, time in result.timing.items() %}
+      <tr>
+        <td style="padding:6px 8px;color:var(--muted);border-bottom:1px solid var(--border);">
+          {% if stage == 'vehicle_detection' %}🚗 车辆检测 (YOLOv8)
+          {% elif stage == 'lp_detection' %}🪪 车牌检测 (WPOD-Net)
+          {% elif stage == 'ocr' %}🔤 字符识别 (PaddleOCR)
+          {% elif stage == 'annotation' %}🎨 图像标注
+          {% elif stage == 'total' %}📊 总计
+          {% else %}{{ stage }}{% endif %}
+        </td>
+        <td style="padding:6px 8px;text-align:right;border-bottom:1px solid var(--border);font-weight:{% if stage=='total' %}700{% else %}400{% endif %};">
+          {{ time }}
+        </td>
+      </tr>
+      {% endfor %}
+    </table>
+  </div>
+  {% endif %}
+
+  <div class="footer">
+    <a href="https://github.com/blackjaxx/alpr-unconstrained">alpr-unconstrained</a> ·
+    ECCV 2018 · v2.0.0 现代化工具链
+  </div>
+</div>
+
+<script>
+  const dropZone = document.getElementById('dropZone');
+  const fileInput = document.getElementById('fileInput');
+  const preview = document.getElementById('preview');
+  const previewImg = document.getElementById('previewImg');
+  const form = document.getElementById('uploadForm');
+  const submitBtn = document.getElementById('submitBtn');
+  const spinner = document.getElementById('spinner');
+
+  dropZone.addEventListener('dragover', e => { e.preventDefault(); dropZone.classList.add('dragover'); });
+  dropZone.addEventListener('dragleave', () => dropZone.classList.remove('dragover'));
+  dropZone.addEventListener('drop', e => { e.preventDefault(); dropZone.classList.remove('dragover'); });
+
+  fileInput.addEventListener('change', () => {
+    const file = fileInput.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = e => { previewImg.src = e.target.result; preview.style.display = 'block'; };
+      reader.readAsDataURL(file);
+    }
+  });
+
+  form.addEventListener('submit', () => {
+    submitBtn.disabled = true;
+    spinner.classList.add('show');
+    submitBtn.innerHTML = '⏳ 识别中... <span class="spinner show"></span>';
+  });
+</script>
+</body>
+</html>

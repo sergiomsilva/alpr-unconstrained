@@ -1,0 +1,17 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="ALPR CLI (run.sh)" type="PythonConfigurationType" factoryName="Python" nameIsUnique="true" folderName="RunConfig">
+    <module name="alpr-unconstrained" />
+    <option name="INTERPRETER_OPTIONS" value="" />
+    <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+    <option name="PARENT_ENVS" value="true" />
+    <envs>
+      <env name="PYTHONUNBUFFERED" value="1" />
+    </envs>
+    <option name="SDK_NAME" value="Python 3.11 (alpr-unconstrained)" />
+    <option name="runAsTest" value="false" />
+    <option name="version" value="3.13.3" />
+    <option name="SCRIPT_NAME" value="$PROJECT_DIR$/gen-outputs.py" />
+    <option name="ARGS" value="samples/test /tmp/output" />
+    <method v="2" />
+  </configuration>
+</component>

@@ -1,0 +1,12 @@
+# PyCharm 用户: 打开本文件后右上角会出现 Install requirements 提示
+# 推荐用 pip install -e . 安装(可编辑模式, 代码改动即时生效)
+# 本文件与 pyproject.toml 保持同步
+
+keras>=3.0,<4.0
+tensorflow>=2.15,<3.0
+opencv-python>=4.8,<5.0
+ultralytics>=8.0,<9.0
+paddleocr>=2.7,<3.0
+numpy>=1.24,<2.0
+flask>=3.0,<4.0
+werkzeug>=3.0,<4.0

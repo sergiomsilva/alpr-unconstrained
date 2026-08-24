@@ -1,10 +1,9 @@
-
 import numpy as np
 
 from threading import Semaphore, Thread
 from time import sleep
 from random import choice, randint
-from pdb import set_trace as pause
+
 
 class DataGenerator(object):
 
@@ -78,7 +77,7 @@ class DataGenerator(object):
 		self._stop = False
 		self._threads = [Thread(target=self._run) for n in range(self._nthreads)]
 		for thread in self._threads:
-			thread.setDaemon(True)
+			thread.daemon = True
 			thread.start()
 
 	def get_batch(self,N):
@@ -96,5 +95,3 @@ class DataGenerator(object):
 			Y[i] = self._Y[idx]
 		self._sem.release()
 		return X,Y
-
-

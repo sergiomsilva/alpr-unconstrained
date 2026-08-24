@@ -1,64 +1,45 @@
+#!/usr/bin/env python3
+"""License plate OCR using PaddleOCR."""
 import sys
-import cv2
-import numpy as np
 import traceback
+from os.path import splitext, basename
+from glob import glob
+from paddleocr import PaddleOCR
 
-import darknet.python.darknet as dn
 
-from os.path 				import splitext, basename
-from glob					import glob
-from darknet.python.darknet import detect
-from src.label				import dknet_label_conversion
-from src.utils 				import nms
+def main():
+    try:
+        if len(sys.argv) < 2:
+            print('用法: python license-plate-ocr.py <input_dir>')
+            sys.exit(1)
+
+        input_dir = sys.argv[1]
+        output_dir = input_dir
+
+        ocr = PaddleOCR(use_angle_cls=True, lang='en', show_log=False)
+        imgs_paths = sorted(glob('%s/*lp.png' % output_dir))
+
+        print('Performing OCR with PaddleOCR...')
+        for img_path in imgs_paths:
+            print('\tScanning %s' % img_path)
+            bname = basename(splitext(img_path)[0])
+
+            result = ocr.ocr(img_path, cls=True)
+            if result and result[0]:
+                lines = result[0]
+                lines.sort(key=lambda x: x[0][0][0])
+                text = ''.join([line[1][0] for line in lines])
+                with open('%s/%s_str.txt' % (output_dir, bname), 'w') as f:
+                    f.write(text + '\n')
+                print('\t\tLP: %s' % text)
+            else:
+                print('\t\tNo characters found')
+
+    except Exception:
+        traceback.print_exc()
+        sys.exit(1)
+    sys.exit(0)
 
 
 if __name__ == '__main__':
-
-	try:
-	
-		input_dir  = sys.argv[1]
-		output_dir = input_dir
-
-		ocr_threshold = .4
-
-		ocr_weights = 'data/ocr/ocr-net.weights'
-		ocr_netcfg  = 'data/ocr/ocr-net.cfg'
-		ocr_dataset = 'data/ocr/ocr-net.data'
-
-		ocr_net  = dn.load_net(ocr_netcfg, ocr_weights, 0)
-		ocr_meta = dn.load_meta(ocr_dataset)
-
-		imgs_paths = sorted(glob('%s/*lp.png' % output_dir))
-
-		print 'Performing OCR...'
-
-		for i,img_path in enumerate(imgs_paths):
-
-			print '\tScanning %s' % img_path
-
-			bname = basename(splitext(img_path)[0])
-
-			R,(width,height) = detect(ocr_net, ocr_meta, img_path ,thresh=ocr_threshold, nms=None)
-
-			if len(R):
-
-				L = dknet_label_conversion(R,width,height)
-				L = nms(L,.45)
-
-				L.sort(key=lambda x: x.tl()[0])
-				lp_str = ''.join([chr(l.cl()) for l in L])
-
-				with open('%s/%s_str.txt' % (output_dir,bname),'w') as f:
-					f.write(lp_str + '\n')
-
-				print '\t\tLP: %s' % lp_str
-
-			else:
-
-				print 'No characters found'
-
-	except:
-		traceback.print_exc()
-		sys.exit(1)
-
-	sys.exit(0)
+    main()

@@ -1,67 +1,121 @@
-# ALPR in Unscontrained Scenarios
+# 非受限场景下的车牌识别 (ALPR Unconstrained)
 
-## Introduction
+## PyCharm 2026.1 一键启动
 
-This repository contains the author's implementation of ECCV 2018 paper "License Plate Detection and Recognition in Unconstrained Scenarios".
+1. **Clone** `https://github.com/blackjaxx/alpr-unconstrained.git`
+2. PyCharm 自动识别 `.python-version`，**创建 venv** 即可
+3. 打开 `pyproject.toml` → 点击 "Install requirements"
+4. 终端运行 `bash get-networks.sh`
+5. 编辑器右上角选择 **`ALPR WebUI`** 配置 → 点击 Run
+6. 浏览器访问 `http://127.0.0.1:5000`
 
-* Paper webpage: http://sergiomsilva.com/pubs/alpr-unconstrained/
+> 详细步骤见 [`PYCHARM.md`](./PYCHARM.md)
 
-If you use results produced by our code in any publication, please cite our paper:
+## 简介
 
-```
-@INPROCEEDINGS{silva2018a,
-  author={S. M. Silva and C. R. Jung}, 
-  booktitle={2018 European Conference on Computer Vision (ECCV)}, 
-  title={License Plate Detection and Recognition in Unconstrained Scenarios}, 
-  year={2018}, 
-  pages={580-596}, 
-  doi={10.1007/978-3-030-01258-8_36}, 
-  month={Sep},}
-```
+本仓库是 ECCV 2018 论文 *"License Plate Detection and Recognition in Unconstrained Scenarios"* 的实现代码。
 
-## Requirements
+v2.0.0 现代化升级：Python 3.11+ / Keras 3 / TensorFlow 2.x / YOLOv8 / PaddleOCR，不再需要编译 Darknet C 代码。同时提供了 Flask Web 界面、命令行入口和 PyCharm 完整运行配置。
 
-In order to easily run the code, you must have installed the Keras framework with TensorFlow backend. The Darknet framework is self-contained in the "darknet" folder and must be compiled before running the tests. To build Darknet just type "make" in "darknet" folder:
+引用文献 (BibTeX) 详见 `README` 末尾或论文网页。
 
-```shellscript
-$ cd darknet && make
-```
+## 三种启动方式
 
-**The current version was tested in an Ubuntu 16.04 machine, with Keras 2.2.4, TensorFlow 1.5.0, OpenCV 2.4.9, NumPy 1.14 and Python 2.7.**
+| 场景 | 命令 |
+|------|------|
+| PyCharm 启动 (推荐) | Run Configurations → `ALPR WebUI` → ▶ Run |
+| 命令行 Web 界面 | `python run.py` |
+| 命令行三阶段流水线 | `bash run.sh -i samples/test -o /tmp/output -c /tmp/output/results.csv` |
 
-## Download Models
+## 环境要求
 
-After building the Darknet framework, you must execute the "get-networks.sh" script. This will download all the trained models:
-
-```shellscript
-$ bash get-networks.sh
+```bash
+pip install -e .
 ```
 
-## Running a simple test
+自动安装：Keras 3 + TensorFlow 2.15+、Ultralytics YOLOv8、PaddleOCR、OpenCV 4.8+、Flask 3.0+、NumPy。
 
-Use the script "run.sh" to run our ALPR approach. It requires 3 arguments:
-* __Input directory (-i):__ should contain at least 1 image in JPG or PNG format;
-* __Output directory (-o):__ during the recognition process, many temporary files will be generated inside this directory and erased in the end. The remaining files will be related to the automatic annotated image;
-* __CSV file (-c):__ specify an output CSV file.
+## 下载模型
 
-```shellscript
-$ bash get-networks.sh && bash run.sh -i samples/test -o /tmp/output -c /tmp/output/results.csv
+```bash
+bash get-networks.sh
 ```
 
-## Training the LP detector
+YOLOv8 和 PaddleOCR 模型首次运行时自动下载。
 
-To train the LP detector network from scratch, or fine-tuning it for new samples, you can use the train-detector.py script. In folder samples/train-detector there are 3 annotated samples which are used just for demonstration purposes. To correctly reproduce our experiments, this folder must be filled with all the annotations provided in the training set, and their respective images transferred from the original datasets.
+## 三阶段流水线
 
-The following command can be used to train the network from scratch considering the data inside the train-detector folder:
-
-```shellscript
-$ mkdir models
-$ python create-model.py eccv models/eccv-model-scracth
-$ python train-detector.py --model models/eccv-model-scracth --name my-trained-model --train-dir samples/train-detector --output-dir models/my-trained-model/ -op Adam -lr .001 -its 300000 -bs 64
+```
+原始图片 → YOLOv8 (车辆检测) → WPOD-Net (车牌检测) → PaddleOCR (字符识别) → 结果
 ```
 
-For fine-tunning, use your model with --model option.
+| 阶段 | 引擎 | 替代原版 |
+|------|------|----------|
+| 车辆检测 | ultralytics/YOLOv8n | Darknet YOLO-VOC |
+| 车牌检测 | Keras WPOD-Net | Darknet 自定义网络 |
+| 字符识别 | PaddleOCR | Darknet 自定义网络 |
 
-## A word on GPU and CPU
+## 训练车牌检测器
 
-We know that not everyone has an NVIDIA card available, and sometimes it is cumbersome to properly configure CUDA. Thus, we opted to set the Darknet makefile to use CPU as default instead of GPU to favor an easy execution for most people instead of a fast performance. Therefore, the vehicle detection and OCR will be pretty slow. If you want to accelerate them, please edit the Darknet makefile variables to use GPU.
+```bash
+mkdir models
+python create-model.py eccv models/eccv-model-scratch
+python train-detector.py --model models/eccv-model-scratch --name my-model \
+    --train-dir samples/train-detector --output-dir models/my-trained-model/ \
+    -op Adam -lr .001 -its 300000 -bs 64
+```
+
+## 关于 GPU / CPU
+
+WPOD-Net (Keras/TF)、YOLOv8、PaddleOCR 自动识别 GPU 并加速推理。Apple Silicon Mac 用户安装 `tensorflow-metal` 后也可使用 GPU。
+
+## 项目结构
+
+```
+alpr-unconstrained/
+├── run.py                         PyCharm 入口 (web/cli)
+├── webapp.py                      Flask Web 应用
+├── templates/index.html           Web UI 页面
+├── PYCHARM.md                     PyCharm 配置指南
+├── vehicle-detection.py           阶段1: 车辆检测 (YOLOv8)
+├── license-plate-detection.py     阶段2: 车牌检测 (WPOD-Net)
+├── license-plate-ocr.py           阶段3: 字符识别 (PaddleOCR)
+├── create-model.py                WPOD-Net 模型定义
+├── train-detector.py              训练脚本
+├── run.sh                         Bash 流水线
+├── get-networks.sh                下载预训练模型
+├── annotation-tool.py             标注工具
+├── gen-outputs.py                 结果可视化
+│
+├── pyproject.toml                 依赖 + PyCharm 项目配置
+├── .python-version                PyCharm 自动识别 Python 版本
+├── .gitignore                     屏蔽 venv / .idea / 模型等
+│
+├── .idea/                         PyCharm 项目配置 (已纳入版本控制)
+│   ├── alpr-unconstrained.iml
+│   ├── modules.xml
+│   └── runConfigurations/
+│       ├── ALPR_WebUI.xml
+│       └── ALPR_CLI.xml
+│
+└── src/                           核心库
+    ├── label.py
+    ├── loss.py
+    ├── keras_utils.py
+    ├── data_generator.py
+    ├── sampler.py
+    ├── projection_utils.py
+    ├── drawing_utils.py
+    └── utils.py
+```
+
+## 命令行脚本对照表
+
+| 命令 | 说明 |
+|------|------|
+| `python run.py` | 启动 Web (端口 5000) |
+| `python run.py cli <input> <output>` | 三阶段流水线 |
+| `alpr-webui` | 安装后控制台入口 |
+| `python train-detector.py ...` | 训练车牌检测器 |
+| `bash run.sh -i ... -o ... -c ...` | Bash 流水线 |
+| `bash get-networks.sh` | 下载预训练模型 |

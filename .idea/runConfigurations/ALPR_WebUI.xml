@@ -1,0 +1,25 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="ALPR WebUI" type="PythonConfigurationType" factoryName="Python" nameIsUnique="true" folderName="RunConfig">
+    <module name="alpr-unconstrained" />
+    <option name="INTERPRETER_OPTIONS" value="" />
+    <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+    <option name="PARENT_ENVS" value="true" />
+    <envs>
+      <env name="PYTHONUNBUFFERED" value="1" />
+      <env name="FLASK_ENV" value="development" />
+      <env name="FLASK_DEBUG" value="1" />
+    </envs>
+    <option name="SDK_HOME" value="" />
+    <option name="SDK_NAME" value="Python 3.11 (alpr-unconstrained)" />
+    <option name="runAsTest" value="false" />
+    <option name="version" value="3.13.3" />
+    <option name="PARENT_NAME" value="" />
+    <option name="SCRIPT_NAME" value="$PROJECT_DIR$/webapp.py" />
+    <option name="ARGS" value="" />
+    <option name="MULTI_SOURCE" value="false" />
+    <option name="launchDebugAsTest" value="false" />
+    <option name="SCRIPT_TEXT" value="" />
+    <option name="INDEPENDENT_SCRIPT" value="false" />
+    <method v="2" />
+  </configuration>
+</component>

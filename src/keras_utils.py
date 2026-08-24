@@ -1,4 +1,3 @@
-
 import numpy as np
 import cv2
 import time
@@ -24,7 +23,7 @@ def save_model(model,path,verbose=0):
 	with open('%s.json' % path,'w') as json_file:
 		json_file.write(model_json)
 	model.save_weights('%s.h5' % path)
-	if verbose: print 'Saved to %s' % path
+	if verbose: print('Saved to %s' % path)
 
 def load_model(path,custom_objects={},verbose=0):
 	from keras.models import model_from_json
@@ -34,7 +33,7 @@ def load_model(path,custom_objects={},verbose=0):
 		model_json = json_file.read()
 	model = model_from_json(model_json, custom_objects=custom_objects)
 	model.load_weights('%s.h5' % path)
-	if verbose: print 'Loaded from %s' % path
+	if verbose: print('Loaded from %s' % path)
 	return model
 
 
@@ -70,7 +69,7 @@ def reconstruct(Iorig,I,Y,out_size,threshold=.9):
 		A[0,0] = max(A[0,0],0.)
 		A[1,1] = max(A[1,1],0.)
 
-		pts = np.array(A*base(vxx,vyy)) #*alpha
+		pts = np.array(A*base(vxx,vyy))
 		pts_MN_center_mn = pts*side
 		pts_MN = pts_MN_center_mn + mn.reshape((2,1))
 
@@ -94,7 +93,6 @@ def reconstruct(Iorig,I,Y,out_size,threshold=.9):
 
 	return final_labels,TLps
 	
-
 def detect_lp(model,I,max_dim,net_step,out_size,threshold):
 
 	min_dim_img = min(I.shape[:2])
@@ -109,7 +107,7 @@ def detect_lp(model,I,max_dim,net_step,out_size,threshold):
 	T = T.reshape((1,T.shape[0],T.shape[1],T.shape[2]))
 
 	start 	= time.time()
-	Yr 		= model.predict(T)
+	Yr 		= model.predict(T, verbose=0)
 	Yr 		= np.squeeze(Yr)
 	elapsed = time.time() - start
 
